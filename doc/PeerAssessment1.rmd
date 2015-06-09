@@ -1,0 +1,75 @@
+---
+title: "Reproducible research - Peer assessment 1"
+author: "Antonio Ripoll"
+date: "Monday, June 08, 2015"
+output: html_document
+---
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk.
+
+###Loading and preprocessing the data
+
+First set work directory and load data from activity file.
+
+```{r}
+setwd("C:/CURSOS/COURSERA/Reproducible Research/PROYECTO/PeerAssessment1")
+activity<-read.csv("./data/activity.csv")
+```
+
+####What is mean total number of steps taken per day?
+
+For this part of the assignment, you can ignore the missing values in the dataset with `na.rm=FALSE`.
+
+Calculate the total number of steps taken per day
+```{r}
+a<-tapply(activity$steps,activity$date,sum,na.rm=FALSE)
+plot(a, col = "red", lwd = 10, ylab='Number of steps', xlab='Day of period')
+lines(a)
+```
+
+Another plot with `barplot(a)` present bars reflecting how long we go whith steps
+```{r,echo=FALSE}
+barplot(a)
+```
+
+For present the frequency of the walks we can see an histogram
+```{r}
+hist(a, col="lightgrey", main="Histogram of steps", xlab="Number of steps", ylab="Number of days")
+```
+
+####Calculate and report the mean and median of the total number of steps taken per day
+
+The mean is calculated with:
+```{r}
+media<-tapply(activity$steps,activity$date,mean,na.rm=FALSE)
+```
+
+and plot with `plot(a)`:
+
+```{r, echo=FALSE}
+plot(media, col="blue", type="l")
+```
+
+The median is calculated with:
+```{r}
+mediana<-tapply(activity$steps,activity$date,median,na.rm=FALSE)
+summary(mediana)
+# ops median is 0 !
+```
+
+but in `summary(activity)` also the median of steeps is 0
+```{r, echo=FALSE}
+summary(activity)
+```
+
+If we want the median when steeps is greather than 0 construct a subset and plot it
+```{r}
+b<-subset(activity,steps>0)
+mediana<-tapply(b$steps,b$date,median,na.rm=FALSE)
+plot(mediana, col="red", type="l",ylim=c(0,120))
+lines(media, col="blue")
+```
+
+
